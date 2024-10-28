@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ThemeContext } from './ThemeContext';
 import boleto from "../components/boleto.png";
 import dinheiro from "../components/dinheiro.png";
 import Logo from "../components/logo.png";
@@ -9,15 +10,15 @@ import pix from "../components/pix.png";
 import Setting from "../components/setting.png";
 import Wallet from "../components/Wallet.png";
 
+;
+
 export function Home() {
   const [balance, setBalance] = useState(250.76);
   const [hideBalance, setHideBalance] = useState(false);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation();
 
   const toggleHideBalance = () => setHideBalance(!hideBalance);
-  const toggleTheme = () => setIsDarkTheme(!isDarkTheme);
-
   const currentStyles = isDarkTheme ? darkStyles : styles;
 
   return (
@@ -25,7 +26,11 @@ export function Home() {
       <View style={currentStyles.content}>
         <View style={currentStyles.header}>
           <Image source={Logo} />
-          <Switch value={isDarkTheme} onValueChange={toggleTheme} />
+          <TouchableOpacity onPress={toggleTheme}>
+            <Text style={currentStyles.toggleThemeText}>
+              {isDarkTheme ? 'Tema Claro' : 'Tema Escuro'}
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={currentStyles.card}>
           <View style={currentStyles.cardHeader}>
@@ -89,6 +94,7 @@ export function Home() {
       </View>
     </View>
   );
+
 }
 
 const styles = StyleSheet.create({
@@ -192,10 +198,25 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "600",
   },
+  cardFinal: {
+    padding: 20,
+    width: "90%",
+    height: 70,
+    borderRadius: 20,
+    marginTop: -100,
+    marginLeft: 20,
+    elevation: 1,
+    backgroundColor: "#414345",
+  },
   cardFinalText: {
     fontSize: 12,
     color: "#FFF",
     fontWeight: "600",
     lineHeight: 20,
+  },
+  hideBalanceText: {
+    fontSize: 16,
+    color: "#FFF",
+    fontWeight: "600",
   },
 });
